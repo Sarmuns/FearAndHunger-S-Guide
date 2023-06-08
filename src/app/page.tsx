@@ -3,6 +3,9 @@ import NavBar from "./navbar";
 
 export default function Home() {
     return (
-        <NavBar />
+        <div className="flex items-center justify-center">
+            <NavBar />
+
+        </div>
     );
     }

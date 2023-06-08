@@ -1,6 +1,7 @@
 "use client"
 import Image from 'next/image';
-import { useState } from 'react';
+import { Container } from 'postcss';
+import { useState, useEffect } from 'react';
 
 const Images = {
   Enki: '/Enki.webp',
@@ -18,20 +19,16 @@ type PlayerImageProps = {
   alt: string;
   className?: string;
   onClick?: () => any;
-  Click?: any;
-  select?: any;
+  select?: boolean;
 };
 
 const PlayerImage = ({ src, alt, className, onClick, select }: PlayerImageProps) => (
-  <div
-    className="w-1/4 flex flex-col items-center justify-center"
-  >
-    {select? (
-
-      <div
-      className= 'text-white mt-2 text-center mx-auto'>{alt}
-    </div>
-      ) : (<></>)}
+  <div className="w-1/4 flex flex-col items-center justify-center">
+    {select ? (
+      <div className="text-white mt-2 text-center mx-auto">{alt}</div>
+    ) : (
+      <></>
+    )}
 
     <Image
       src={src}
@@ -41,7 +38,6 @@ const PlayerImage = ({ src, alt, className, onClick, select }: PlayerImageProps)
       className={`h-auto w-auto mx-auto ${className}`}
       onClick={onClick}
     />
-
   </div>
 );
 
@@ -52,22 +48,39 @@ type SelectedState = {
   Rag: boolean;
 };
 
-
-
-
 const NavBar = () => {
-  const [Selected, setSelected] = useState<SelectedState>({
+  const [selected, setSelected] = useState<SelectedState>({
     Enki: false,
     Darce: false,
     Cahara: false,
     Rag: false,
   });
+  const [containerClass, setContainerClass] = useState<string>('w-1/4');
 
-  const HandleClick = (x: string) => {
+  useEffect(() => {
+    const handleResize = () => {
 
+
+      if (window.innerWidth < 750){
+        setContainerClass('w-full');
+      } else if (window.innerWidth < 1650) {
+        setContainerClass('w-1/2');
+      } else {
+        setContainerClass('w-1/4');
+      }     
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [containerClass]);
+  const handleClick = (x: string) => {
     const updatedSelected: SelectedState = {} as SelectedState;
-    Object.keys(Selected).forEach((key) => {
-      updatedSelected[key as keyof SelectedState] = false; //all to false
+    Object.keys(selected).forEach((key) => {
+      updatedSelected[key as keyof SelectedState] = false; // All to false
     });
     updatedSelected[x as keyof SelectedState] = true;
 
@@ -75,51 +88,42 @@ const NavBar = () => {
   };
 
   return (
-
-    <div className="shadow-lg rounded-lg p-4 w-1/4 bg-[url('/Dungeon_background.webp')] bg-center">
+    <div
+    className={`shadow-lg p-4 ${containerClass} bg-[url('/Dungeon_background.webp')] bg-center`}
+    >
       <div className="h-40 relative">
         <div className="w-full h-full flex items-center">
-
           <PlayerImage
-            onClick={() => HandleClick('Enki')}
-            src={Selected.Enki ? Images.Enki : Images.Enki2}
+            onClick={() => handleClick('Enki')}
+            src={selected.Enki ? Images.Enki : Images.Enki2}
             alt="Enki"
-            className="rounded-l-lg"
-            select={Selected.Enki}
+            select={selected.Enki}
           />
 
-
           <PlayerImage
-            onClick={() => HandleClick('Darce')}
-            src={Selected.Darce ? Images.Darce : Images.Darce2}
+            onClick={() => handleClick('Darce')}
+            src={selected.Darce ? Images.Darce : Images.Darce2}
             alt="D'arce"
-            select={Selected.Darce}
+            select={selected.Darce}
           />
 
-
           <PlayerImage
-            onClick={() => HandleClick('Cahara')}
-            src={Selected.Cahara ? Images.Cahara : Images.Cahara2}
+            onClick={() => handleClick('Cahara')}
+            src={selected.Cahara ? Images.Cahara : Images.Cahara2}
             alt="Cahara"
-            select={Selected.Cahara}
+            select={selected.Cahara}
           />
-
 
           <PlayerImage
-            onClick={() => HandleClick('Rag')}
-            src={Selected.Rag ? Images.Rag : Images.Rag2}
+            onClick={() => handleClick('Rag')}
+            src={selected.Rag ? Images.Rag : Images.Rag2}
             alt="Ragnvaldr"
-            className="rounded-r-lg"
-            select={Selected.Rag}
+            select={selected.Rag}
           />
-
         </div>
       </div>
     </div>
-
-  )
-
-
-}
+  );
+};
 
 export default NavBar;
