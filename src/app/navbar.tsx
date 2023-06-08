@@ -22,24 +22,32 @@ type PlayerImageProps = {
   select?: boolean;
 };
 
-const PlayerImage = ({ src, alt, className, onClick, select }: PlayerImageProps) => (
-  <div className="w-1/4 flex flex-col items-center justify-center">
-    {select ? (
-      <div className="text-white mt-2 text-center mx-auto">{alt}</div>
-    ) : (
-      <></>
-    )}
+const PlayerImage = ({ src, alt, className, onClick, select }: PlayerImageProps) => {
+  const maxImageHeight = 140;
 
-    <Image
-      src={src}
-      width={100}
-      height={100}
-      alt={alt}
-      className={`h-auto w-auto mx-auto ${className}`}
-      onClick={onClick}
-    />
-  </div>
-);
+  return (
+    <div className="mt-20  w-1/4 flex flex-col items-center justify-center">
+      {select ? (
+        <div className="text-white mt-2 text-center mx-auto">{alt}</div>
+      ) : (
+        <></>
+      )}
+
+      <div
+        className={`${className} min-h-60 relative`}
+        style={{ paddingBottom: `${(100 / maxImageHeight) * 100}%` }}
+      >
+        <img
+          src={src}
+          alt={alt}
+          className="inset-0 h-full w-full object-contain"
+          onClick={onClick}
+        />
+      </div>
+    </div>
+  );
+};
+
 
 type SelectedState = {
   Enki: boolean;
