@@ -1,6 +1,4 @@
 "use client"
-import Image from 'next/image';
-import { Container } from 'postcss';
 import { useState, useEffect } from 'react';
 
 const Images = {
@@ -40,7 +38,7 @@ const PlayerImage = ({ src, alt, className, onClick, select }: PlayerImageProps)
         <img
           src={src}
           alt={alt}
-          className="inset-0 h-full w-full object-contain"
+          className="h-full w-full object-contain"
           onClick={onClick}
         />
       </div>
@@ -71,10 +69,10 @@ const NavBar = () => {
 
       if (window.innerWidth < 750){
         setContainerClass('w-full');
-      } else if (window.innerWidth < 1650) {
+      } else if (window.innerWidth < 1450) {
         setContainerClass('w-1/2');
       } else {
-        setContainerClass('w-1/4');
+        setContainerClass('w-1/3');
       }     
     };
 
